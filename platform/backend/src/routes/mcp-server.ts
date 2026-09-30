@@ -304,8 +304,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
           accessToken: z.string().optional(),
           // When true, environmentValues and userConfigValues contain vault references in "path#key" format
           isByosVault: z.boolean().optional(),
-          // Kubernetes service account override for local MCP servers
-          serviceAccount: z.string().optional(),
         }),
         response: constructResponseSchema(SelectMcpServerSchema),
       },
@@ -318,7 +316,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
         isByosVault,
         userConfigValues,
         environmentValues,
-        serviceAccount,
         ...restDataFromRequestBody
       } = body;
       const serverData: typeof restDataFromRequestBody & {
@@ -532,26 +529,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
         // secret/deployment work, so a blocked install has no side effects beyond
         // the pending flag.
         await assertInstallAllowedOrBlock({ catalogItem, organizationId });
-
-        // Update catalog's serviceAccount if user provided a different value
-        const normalizedServiceAccount =
-          serviceAccount === "" ? undefined : serviceAccount;
-        if (
-          catalogItem?.serverType === "local" &&
-          normalizedServiceAccount !== undefined &&
-          catalogItem.localConfig?.serviceAccount !== normalizedServiceAccount
-        ) {
-          await InternalMcpCatalogModel.update(catalogItem.id, {
-            localConfig: {
-              ...catalogItem.localConfig,
-              serviceAccount: normalizedServiceAccount,
-            },
-          });
-          // Update local reference for deployment
-          if (catalogItem.localConfig) {
-            catalogItem.localConfig.serviceAccount = normalizedServiceAccount;
-          }
-        }
       }
 
       // For REMOTE servers: create secrets and validate connection
@@ -2230,8 +2207,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
           userConfigValues: z.record(z.string(), z.string()).optional(),
           // Whether environmentValues contains vault references in path#key format
           isByosVault: z.boolean().optional(),
-          // Kubernetes service account override
-          serviceAccount: z.string().optional(),
           // SPDX-SnippetBegin
           // SPDX-SnippetCopyrightText: 2026 Archestra Inc.
           // SPDX-License-Identifier: LicenseRef-Archestra-Enterprise
@@ -2247,7 +2222,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
         environmentValues,
         userConfigValues,
         isByosVault,
-        serviceAccount,
         // SPDX-SnippetBegin
         // SPDX-SnippetCopyrightText: 2026 Archestra Inc.
         // SPDX-License-Identifier: LicenseRef-Archestra-Enterprise
@@ -2606,19 +2580,6 @@ const mcpServerRoutes: FastifyPluginAsyncZod = async (fastify) => {
       // an empty-body (auto-cascade) reinstall.
       if (catalogItem.serverType === "local") {
         await McpServerModel.update(id, { environmentValues: mergedPlainEnv });
-      }
-
-      // Update service account if provided
-      if (
-        serviceAccount !== undefined &&
-        catalogItem.localConfig?.serviceAccount !== serviceAccount
-      ) {
-        await InternalMcpCatalogModel.update(catalogItem.id, {
-          localConfig: {
-            ...catalogItem.localConfig,
-            serviceAccount: serviceAccount || undefined,
-          },
-        });
       }
 
       // Set status to "pending" immediately so UI shows progress bar

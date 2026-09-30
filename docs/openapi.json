@@ -300466,9 +300466,6 @@
                   },
                   "isByosVault": {
                     "type": "boolean"
-                  },
-                  "serviceAccount": {
-                    "type": "string"
                   }
                 },
                 "required": [
@@ -304963,9 +304960,6 @@
                   },
                   "isByosVault": {
                     "type": "boolean"
-                  },
-                  "serviceAccount": {
-                    "type": "string"
                   },
                   "hibernationMode": {
                     "type": "string",

@@ -76989,7 +76989,6 @@ export type InstallMcpServerData = {
         agentIds?: Array<string>;
         accessToken?: string;
         isByosVault?: boolean;
-        serviceAccount?: string;
     };
     path?: never;
     query?: never;
@@ -78172,7 +78171,6 @@ export type ReinstallMcpServerData = {
             [key: string]: string;
         };
         isByosVault?: boolean;
-        serviceAccount?: string;
         hibernationMode?: 'inherit' | 'enabled' | 'disabled';
     };
     path: {
