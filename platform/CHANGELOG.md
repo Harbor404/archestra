@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.68](https://github.com/archestra-ai/archestra/compare/platform-v1.3.67...platform-v1.3.68) (2026-10-01)
+
+
+### Bug Fixes
+
+* **anthropic:** isolate explicit bearer credentials (backport release/1.3) ([#8334](https://github.com/archestra-ai/archestra/issues/8334)) ([524265b](https://github.com/archestra-ai/archestra/commit/524265b84bf0ed4a6e174157a29064ba189f4a0b))
+* **deps:** patch platform and MCP image vulnerabilities (backport release/1.3) ([#8351](https://github.com/archestra-ai/archestra/issues/8351)) ([2517c8b](https://github.com/archestra-ai/archestra/commit/2517c8b5c5c36de2ee01bf24df71554ddcc06bee))
+* **xai:** correct the SuperGrok name in sign-in errors and docs (backport release/1.3) ([#8359](https://github.com/archestra-ai/archestra/issues/8359)) ([8851a21](https://github.com/archestra-ai/archestra/commit/8851a21193bd181806c6e96e3415af4ffe9653cd))
+* **xai:** send a current Grok CLI version (backport release/1.3) ([#8349](https://github.com/archestra-ai/archestra/issues/8349)) ([b769b00](https://github.com/archestra-ai/archestra/commit/b769b0015be33a86e8d77130462408036b2005c8))
+
 ## [1.3.67](https://github.com/archestra-ai/archestra/compare/platform-v1.3.66...platform-v1.3.67) (2026-09-30)
 
 
